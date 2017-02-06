@@ -75,8 +75,8 @@ function LinkedList(){
 }
 
 
-// Time Complexity:
-// Auxiliary Space Complexity:
+// Time Complexity: O(1)
+// Auxiliary Space Complexity: O(1)
 LinkedList.prototype.append = function(value) {
   var node = new Node(value);
   var current;
@@ -100,8 +100,8 @@ LinkedList.prototype.append = function(value) {
 };
 
 
-// Time Complexity:
-// Auxiliary Space Complexity:
+// Time Complexity: O(n)
+// Auxiliary Space Complexity: O(1)
 LinkedList.prototype.insert = function(value, index) {
 
   // check for out-of-bounds values
@@ -149,11 +149,36 @@ LinkedList.prototype.insert = function(value, index) {
 };
 
 
-// Time Complexity:
-// Auxiliary Space Complexity:
+// Time Complexity: O(1)
+// Auxiliary Space Complexity: O(1)
 LinkedList.prototype.delete = function(index) {
+  // console.log(this, 'Original LinkedList')
   // check for in-bound
-  if( index >= 0 && index <= this.length){
+  // if it out of bounds, simply return false
+  if( index >= 0 && index < this.length ){
+    var current = this.head;
+    var previousNode;
+    var position = 0;
+    // traverse the list until we find the desired index
+    while(position < index){
+      previousNode = current;
+      current = current.next
+      position++;
+    }
+    // If we are deleting at the head,  do this
+    if(previousNode === undefined){
+      this.head = current.next
+    current = current.next;
+    this.tail = current
+    }
+    else if (current.next === null){
+      this.tail = previousNode;
+    }
+    else{
+      previousNode.next = current.next;
+    }
+
+    this.length--; //update the lenght of list
   }
   else{
     return false
@@ -161,10 +186,19 @@ LinkedList.prototype.delete = function(index) {
 };
 
 
-// Time Complexity:
-// Auxiliary Space Complexity:
+// Time Complexity: O(n)
+// Auxiliary Space Complexity: 0(1)
 LinkedList.prototype.contains = function(value) {
-
+  // lets start traversing from the head
+  var current = this.head;
+  while(current){
+    if(current.value === value){
+      return true
+    } else{
+      current = current.next
+    }
+  }
+  return false
 };
 
 
@@ -407,6 +441,9 @@ assert(testCount, 'able to delete a node in between two nodes', function(){
   linkedList.delete(1);
   return linkedList.length === 2 && linkedList.head.value === 5 &&
          linkedList.tail.value === 15;
+         // I added extra condition to actually confirm that node was deleted between the head and tail
+  // return linkedList.length === 2 && linkedList.head.value === 5 &&
+  //        linkedList.tail.value === 15 && linkedList.head.next === linkedList.tail;
 });
 
 assert(testCount, 'able to delete the only node in a linked list', function(){
